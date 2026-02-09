@@ -1,0 +1,13 @@
+export default class MonokaiPro {
+	constructor() {
+		this.theme = 'Monokai Pro Light';
+		this.numIcons = 70;
+	}
+
+	// set color scheme, UI, icon pack
+	setTheme(theme) {
+		this.theme = theme;
+
+		console.log(`theme: ${theme}`)
+	}
+}
