@@ -1,5 +1,6 @@
 from dash import Dash,html,dcc
-from dash.dependecies import Input,Output
+from dash.dependencies import Input, Output
+
 
 app=Dash(__name__)
 
