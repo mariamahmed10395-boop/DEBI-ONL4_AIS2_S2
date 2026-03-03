@@ -4,7 +4,7 @@
 import warnings
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn.model_selection import learning_curve, ShuffleSplit, train_test_split
+from sklearn.model_selection import learning_curve, ShuffleSplit, train_test_split, validation_curve
 from sklearn.tree import DecisionTreeRegressor
 
 # Suppress matplotlib user warnings
@@ -19,13 +19,13 @@ def ModelComplexity(X, y):
         The learning and testing errors rates are then plotted. """
     
     # Create 10 cross-validation sets for training and testing
-    cv = ShuffleSplit(X.shape[0], n_iter = 10, test_size = 0.2, random_state = 0)
+    cv = ShuffleSplit(n_splits = 10, test_size = 0.2, random_state = 0)
 
     # Vary the max_depth parameter from 1 to 10
     max_depth = np.arange(1,11)
 
     # Calculate the training and testing scores
-    train_scores, test_scores = curves.validation_curve(DecisionTreeRegressor(), X, y, \
+    train_scores, test_scores = validation_curve(DecisionTreeRegressor(), X, y, \
         param_name = "max_depth", param_range = max_depth, cv = cv, scoring = 'r2')
 
     # Find the mean and standard deviation for smoothing
@@ -35,21 +35,21 @@ def ModelComplexity(X, y):
     test_std = np.std(test_scores, axis=1)
 
     # Plot the validation curve
-    pl.figure(figsize=(7, 5))
-    pl.title('Decision Tree Regressor Complexity Performance')
-    pl.plot(max_depth, train_mean, 'o-', color = 'r', label = 'Training Score')
-    pl.plot(max_depth, test_mean, 'o-', color = 'g', label = 'Validation Score')
-    pl.fill_between(max_depth, train_mean - train_std, \
+    plt.figure(figsize=(7, 5))
+    plt.title('Decision Tree Regressor Complexity Performance')
+    plt.plot(max_depth, train_mean, 'o-', color = 'r', label = 'Training Score')
+    plt.plot(max_depth, test_mean, 'o-', color = 'g', label = 'Validation Score')
+    plt.fill_between(max_depth, train_mean - train_std, \
         train_mean + train_std, alpha = 0.15, color = 'r')
-    pl.fill_between(max_depth, test_mean - test_std, \
+    plt.fill_between(max_depth, test_mean - test_std, \
         test_mean + test_std, alpha = 0.15, color = 'g')
     
     # Visual aesthetics
-    pl.legend(loc = 'lower right')
-    pl.xlabel('Maximum Depth')
-    pl.ylabel('Score')
-    pl.ylim([-0.05,1.05])
-    pl.show()
+    plt.legend(loc = 'lower right')
+    plt.xlabel('Maximum Depth')
+    plt.ylabel('Score')
+    plt.ylim([-0.05,1.05])
+    plt.show()
 
 
 def PredictTrials(X, y, fitter, data):
